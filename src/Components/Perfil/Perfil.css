@@ -1,0 +1,13 @@
+.imageBack{
+    background-color: blue;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+}
+.PerfilNome{
+   text-align: center;
+   display: flex;
+   flex-direction: column;
+   margin-bottom: -50px;
+}

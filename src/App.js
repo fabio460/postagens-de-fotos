@@ -1,9 +1,32 @@
 import './App.css';
-// import {BrowserRouter,Routes} from 'react-router-dom'
+ import {BrowserRouter,Route,Routes} from 'react-router-dom'
+import Login from './Components/Login';
+import PrivateRoutes from './Components/PrivateRoutes';
+import Home from './Components/Home';
+import Perfil from './Components/Perfil';
+import Posts from './Components/Posts';
 function App() {
   return (
     <div className="App">
-       app
+       <BrowserRouter>
+         <Routes>
+            <Route path='/' element={
+              <PrivateRoutes>
+                <Home>
+                  <Posts/>
+                </Home>
+              </PrivateRoutes>
+            }></Route>
+            <Route path='/perfil' element={
+              <PrivateRoutes>
+                 <Home>
+                    <Perfil/>
+                 </Home>
+              </PrivateRoutes>
+            }></Route>
+            <Route path='/login' element={<Login/>}></Route>
+         </Routes>
+       </BrowserRouter>
     </div>
   );
 }
