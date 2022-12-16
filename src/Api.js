@@ -85,3 +85,30 @@ export const getPotById = (id)=>{
   })
   .then(res=>res.json())
 } 
+
+export const register = (nome,email,senha)=>{
+  return fetch(apiBase+'createUser',{
+    headers:{
+      "Content-Type":"application/json"
+    },
+    method:"post",
+    body:JSON.stringify({
+      nome,email,senha
+    })
+  })
+  .then(res=>res.json())
+} 
+
+
+export const updatePhotoPerfil = (fotoDePerfil)=>{
+  return fetch(apiBase+'updateUser',{
+    headers:{
+      "Content-Type":"application/json"
+    },
+    method:"post",
+    body:JSON.stringify({
+      fotoDePerfil,
+    })
+  })
+  .then(res=>res.json())
+} 

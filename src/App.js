@@ -5,6 +5,7 @@ import PrivateRoutes from './Components/PrivateRoutes';
 import Home from './Components/Home';
 import Perfil from './Components/Perfil';
 import Posts from './Components/Posts';
+import Register from './Components/Register';
 function App() {
   return (
     <div className="App">
@@ -25,6 +26,7 @@ function App() {
               </PrivateRoutes>
             }></Route>
             <Route path='/login' element={<Login/>}></Route>
+            <Route path='/register' element={<Register/>}></Route>
          </Routes>
        </BrowserRouter>
     </div>

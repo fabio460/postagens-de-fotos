@@ -1,0 +1,31 @@
+.Register{
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+}
+.RegisterLeft{
+    background-image: url('https://t4.ftcdn.net/jpg/01/19/11/55/360_F_119115529_mEnw3lGpLdlDkfLgRcVSbFRuVl6sMDty.jpg');
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+}
+.RegisterRight{
+    padding: 10%;
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width:500px) {
+    .Register{
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+    .RegisterRight{
+        padding: 10%;
+        background-position: center;
+        background-size: cover;
+        height: 100vh;   
+    }
+    .RegisterLeft{
+        display: none;
+    }
+}

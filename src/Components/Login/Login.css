@@ -1,0 +1,31 @@
+.LoginContainer{
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+}
+.LoginRight{
+    padding: 10%;
+    display: flex;
+    flex-direction: column;
+}
+.LoginLeft{
+    background-image: url('https://t4.ftcdn.net/jpg/01/19/11/55/360_F_119115529_mEnw3lGpLdlDkfLgRcVSbFRuVl6sMDty.jpg');
+    background-position: center;
+    background-size: cover;
+    height: 100vh;
+}
+
+@media (max-width:500px) {
+    .LoginContainer{
+        display: grid;
+        grid-template-columns: 1fr;
+    }
+    .LoginRight{
+        padding: 10%;
+        background-position: center;
+        background-size: cover;
+        height: 100vh;   
+    }
+    .LoginLeft{
+        display: none;
+    }
+}
