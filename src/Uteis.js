@@ -8,3 +8,14 @@ export function nameInitiais(nome) {
     return inicial
   }
 }
+
+export function RamdomString() {
+  let chars = 'abcdefghijlmnopqrstuvxz'
+  let arrChars = chars.split('')
+  let ramdom = ''
+  arrChars.forEach(() => {
+    ramdom += chars[Math.ceil(Math.random()*(arrChars.length-1))]
+  });
+   
+  return ramdom.toString()
+}

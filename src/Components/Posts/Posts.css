@@ -7,7 +7,7 @@
 .Post_setPost{
    display: flex;
    align-items: center;
-   
+   cursor: pointer;
 }
 
 .PostTittle{
@@ -34,4 +34,17 @@
 .PostModal{
     
     z-index: 3;
+}
+.PostImage{
+    
+    max-width: 100%;
+    max-height: 400px;
+}
+@media (max-width:500px) {
+    .PostContainer{
+        grid-template-columns: 1fr;
+    }
+    .PostSeguidores,.PostPerfilCompleto{
+        display: none;
+    }
 }

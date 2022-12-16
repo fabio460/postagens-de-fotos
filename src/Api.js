@@ -2,9 +2,7 @@ import { getJwt } from "./Uteis"
 
 const apiBase = 'https://api-postagens-de-fotos.vercel.app/'
 export const listPostsApi = ()=>{
-   return fetch(apiBase+'listPost',{
-    
-   })
+   return fetch(apiBase+'listPost')
    .then(res=>res.json())
 } 
 
@@ -41,10 +39,49 @@ export const loginApi = (email,senha)=>{
     })
     .then(res=>res.json())
     .then(res=>{
-      console.log(res)
       return res
     })
     .catch(res=>{
       return res
     })
  }
+
+ export const setPost = (imagem,titulo,descricao,id_Usuarios)=>{
+  return fetch(apiBase+'createPostagem',{
+    headers:{
+      "Content-Type":"application/json"
+    },
+    method:"post",
+    body:JSON.stringify({
+      imagem,titulo,descricao,id_Usuarios
+    })
+  })
+  .then(res=>res.json())
+} 
+
+export const deletePost = (id)=>{
+  return fetch(apiBase+'deletePost',{
+    headers:{
+      "Content-Type":"application/json"
+    },
+    method:"DELETE",
+    body:JSON.stringify({
+      id
+    })
+  })
+  .then(res=>res.json())
+} 
+
+
+export const getPotById = (id)=>{
+  return fetch(apiBase+'getPostById',{
+    headers:{
+      "Content-Type":"application/json"
+    },
+    method:"post",
+    body:JSON.stringify({
+      id
+    })
+  })
+  .then(res=>res.json())
+} 
