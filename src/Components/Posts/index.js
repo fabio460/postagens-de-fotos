@@ -41,7 +41,6 @@ export default function Posts() {
             </div>
             <div>
               <h1>Atividades</h1>
-              teste {process.env.REACT_APP_TESTE}
               <div className='cards'>
                 <div style={{width:"100%",margin:"10px 0px 0px 0px"}}>
                   <Modal UserLogged={UserLogged} setupdatePost={setupdatePost} updatePost={updatePost}/>
