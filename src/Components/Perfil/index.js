@@ -5,9 +5,11 @@ import './Perfil.css'
 import { styled } from '@mui/material/styles';
 import {nameInitiais} from '../../Uteis'
 import BtnUpdatePhoto from './BtnUpdatePhoto';
+import { useSelector } from 'react-redux';
 export default function Perfil() {
 const [User, setUser] = useState({})
 const [loadding, setLoadding] = useState(true)
+const atualiza = useSelector(state=>state.AtualizarTela.atualiza)
 async function getUserInformatios() {
   const u = await getUser()
   setUser(u)
@@ -39,9 +41,10 @@ const SmallAvatar = styled(Avatar)(({ theme }) => ({
                     <BtnUpdatePhoto User={User}/>
                   }
                 >
-                  <Avatar sx={{height:'170px',width:'170px'}} src={User?.fotoPerfil}>
+                  <Avatar sx={{height:'170px',width:'170px'}} src={User?.fotoDePerfil} alt='sem imagem'>
                    <div style={{fontSize:"45px"}}> {nameInitiais(User?.nome)}</div>
                   </Avatar>
+                
                 </Badge>
                 <div >{User.nome}</div>         
               </div>

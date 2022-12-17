@@ -10,10 +10,14 @@ import { PhotoCamera } from '@mui/icons-material';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import {  updatePhotoPerfil } from '../../Api';
 import { UpdatePerfilFirebase } from './UpdatePerfilFirebase';
+import { useDispatch, useSelector } from "react-redux";
+
 export default function BtnUpdatePhoto({User}) {
   const [open, setOpen] = React.useState(false);
   const [Url, setUrl] = useState()
   const [Image, setImage] = useState()
+  const atualiza = useSelector(state=>state.AtualizarTela.atualiza)
+  const dispech = useDispatch()
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -37,15 +41,13 @@ export default function BtnUpdatePhoto({User}) {
   }
 
   const UpdatePhotoPerfil =async ()=>{
-    //const alt = await updatePhotoPerfil(Url)
-    const u = await UpdatePerfilFirebase(User?.id,Url)
-    
-    if (u) {
-        window.location.reload()        
-        handleClose()
-    }
-   
+    UpdatePerfilFirebase(User?.id,Url)  
+  
+
+    handleClose()
+
   }
+
   return (
     <div>  
       <IconButton onClick={handleClickOpen}>

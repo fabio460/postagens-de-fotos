@@ -3,10 +3,13 @@ import { getStorage, ref, deleteObject, getDownloadURL, uploadBytes } from "fire
 import { firebaseConfig } from "../../firebaseConfig";
 import { initializeApp } from "firebase/app";
 import { RamdomString, getReferencesImageFirebase } from "../../Uteis";
+import { useDispatch, useSelector } from "react-redux";
 const app = initializeApp(firebaseConfig);
 const storage = getStorage(app);
+
 export async function UpdatePerfilFirebase(id,Url) {
     const i = await getUser(id)
+
     if (i.fotoDePerfil) {
         const refImage = getReferencesImageFirebase(i.fotoDePerfil)
         const desertRef = ref(storage, refImage);
@@ -18,13 +21,12 @@ export async function UpdatePerfilFirebase(id,Url) {
     uploadBytes(storageRef, Url).then((snapshot) => {
         getDownloadURL(ref(storage, storageRef))
         .then((url) => {
-           updatePhotoPerfil(url)
-           return true
+           updatePhotoPerfil(url,id)
+           window.location.reload()         
         })
         .catch((error) => {
           console.log(error)
-          return false
-        });    
+        });  
     });
     
 }

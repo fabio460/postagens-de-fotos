@@ -100,15 +100,17 @@ export const register = (nome,email,senha)=>{
 } 
 
 
-export const updatePhotoPerfil = (fotoDePerfil)=>{
-  return fetch(apiBase+'updateUser',{
+export const updatePhotoPerfil = (fotoDePerfil,id)=>{
+  return fetch(apiBase+'updateImagePerfil',{
     headers:{
       "Content-Type":"application/json"
     },
-    method:"post",
+    method:"put",
     body:JSON.stringify({
+      id,
       fotoDePerfil,
     })
   })
   .then(res=>res.json())
+  .catch(res=>console.log(res))
 } 
