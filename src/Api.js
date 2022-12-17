@@ -114,3 +114,17 @@ export const updatePhotoPerfil = (fotoDePerfil,id)=>{
   .then(res=>res.json())
   .catch(res=>console.log(res))
 } 
+
+export const setLike = (id_Usuarios, id_Postagems )=>{
+  return fetch(apiBase+'setLikes',{
+    headers:{
+      "Content-Type":"application/json"
+    },
+    method:"post",
+    body:JSON.stringify({
+      id_Usuarios, id_Postagems 
+    })
+  })
+  .then(res=>res.json())
+} 
+

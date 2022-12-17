@@ -2,7 +2,7 @@
     background-color: rgb(250, 250, 250);
     border: solid white 1px;
     box-sizing: border-box;
-    height: calc(100vh - 65px);
+    min-height: calc(100vh - 65px);
 }
 .Post_setPost{
    display: flex;
