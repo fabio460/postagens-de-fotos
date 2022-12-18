@@ -37,6 +37,6 @@ export const inputValid = {
 
 export const getReferencesImageFirebase = (imagemString)=>{
   const refImage = imagemString.split('?')[0].split('/')[7]
-  
+  console.log(imagemString)
   return refImage
 }

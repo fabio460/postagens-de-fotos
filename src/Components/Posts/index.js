@@ -1,6 +1,7 @@
-import { Avatar, Divider, IconButton, ListItemButton, MenuItem, Typography } from '@mui/material'
+import { Avatar, Divider, IconButton, ListItemButton, MenuItem, Tooltip, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { getUser, listPostsApi, setLike } from '../../Api'
+import SendIcon from '@mui/icons-material/Send';
+import { getUser, listPostsApi, setComents, setLike } from '../../Api'
 import RecommendIcon from '@mui/icons-material/Recommend';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
@@ -15,7 +16,11 @@ export default function Posts() {
   const [UserLogged, setUserLogged] = useState({})
   const [loadding, setLoadding] = useState(true)
   const [updatePost, setupdatePost] = useState(false)
-  const [ComentOpen, setComentOpen] = useState(false)
+  const [ComentOpen, setComentOpen] = useState({
+    id:-1,
+    condition:false
+  })
+  const [Message, setMessage] = useState('')
   const [Id_Post, setId_Post] = useState(-1)
   async function getListingPosts() {
     const p = await listPostsApi()
@@ -30,14 +35,28 @@ export default function Posts() {
     setLike(UserLogged.id,id)
   }
   const coments = (id)=>{
-    setId_Post(id)
-    setComentOpen(!ComentOpen)
+    setComentOpen({
+      id,
+      condition:!ComentOpen.condition
+    })
+   
+  }
+  
+  const MessageHandle = (id)=>{
+    setComents(UserLogged.id,id,Message)
+    setMessage("")
+  }
+  function MessageHandleEnter(e,id) {
+    if(e === "Enter"){
+      MessageHandle(id)
+    }
   }
   useEffect(()=>{
     getListingPosts()
     
-  },[atualiza,like,coments])
- 
+  },[atualiza,like,MessageHandle])
+  
+  
 
   return (
     <div className='Post'>
@@ -83,9 +102,16 @@ export default function Posts() {
                         {
                           elem.Likes.length !== 0 && 
                           <Typography style={{padding:"10px 0px",display:'flex',alignItems:"center"}}>
-                            <RecommendIcon color='primary' sx={{marginRight:"3px"}}/>
+                            <Tooltip title={
+                              elem.Likes.map(e=>{
+                                return <div>{e.Usuario.nome}</div>
+                              })
+                            }>
+                               <RecommendIcon color='primary' sx={{marginRight:"3px"}}/>
+                            </Tooltip>
                             {elem.Likes.length}
                           </Typography>
+                          
                         }
                         <div>
                           {
@@ -116,14 +142,45 @@ export default function Posts() {
                         </ListItemButton>
                       </div>
                       {
-                        (ComentOpen && elem.id === Id_Post) &&
-                        <div style={{display:'flex',alignItems:'center',margin:"16px"}}>
-                          <Avatar sx={{width:'30px',height:'30px',marginRight:'10px'}}></Avatar>
-                          <div style={{background:'rgb(250, 250, 250)',padding:"5px 12px",borderRadius:'20px',width:'100%'}}>
-                            <input 
-                              style={{outline:'0',border:'none',background:'rgb(250, 250, 250)',width:'100%'}}
-                              placeholder='Escreva um comentário ...'  
-                            />
+                        (ComentOpen.id === elem.id) &&
+                        <div>
+                            <div style={{display:'flex',alignItems:'center',margin:"16px"}}>
+                              <Avatar src={UserLogged.fotoDePerfil} sx={{width:'30px',height:'30px',marginRight:'10px'}}></Avatar>
+                              <div style={{
+                                  background:'rgb(250, 250, 250)',
+                                  padding:"5px 12px",
+                                  borderRadius:'20px',
+                                  width:'100%',
+                                  display:'flex'
+                                }}>
+                                <input 
+                                  style={{outline:'0',border:'none',background:'rgb(250, 250, 250)',width:'100%'}}
+                                  placeholder='Escreva um comentário ...'
+                                  onChange={e=>setMessage(e.target.value)}
+                                  onKeyUp={e=> MessageHandleEnter(e.code,elem.id)}  
+                                  value={Message}
+                                />
+                                <IconButton onClick={()=> MessageHandle(elem.id)}>
+                                  <SendIcon/>
+                                </IconButton>
+                              </div>
+                            </div>
+                            <div>
+                              {
+                                elem.Comentarios.map(c=>{
+                                  return (
+                                    <div style={{display:'flex',alignItems:'center',margin:"16px"}}>
+                                    <Avatar src={c.Usuario.fotoDePerfil} sx={{width:'30px',height:'30px',marginRight:'10px'}}></Avatar>
+                                    <div style={{background:'rgb(250, 250, 250)',padding:"5px 12px",borderRadius:'20px',width:''}}>
+                                      <div style={{outline:'0',border:'none',background:'rgb(250, 250, 250)',width:''}}>
+                                        <div>{c.Usuario.nome}</div>
+                                        <div>{c.body}</div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  ) 
+                                })
+                              }
                           </div>
                         </div>
                       }

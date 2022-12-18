@@ -19,8 +19,7 @@ export default function Login() {
   const logar =async ()=>{
     setLoadding(true)
     let logged = await loginApi(email,senha)
-  
-     if (logged.user) {
+     if (logged) {
       navigate('/')
      }else{
        setLogged(false)

@@ -7,7 +7,8 @@ const app =  initializeApp(firebaseConfig);
 const storage = getStorage();
 export const removeImage = async(id)=>{
     const n = await getPotById(id)
-    const refImage = getReferencesImageFirebase(n)
+    const refImage = getReferencesImageFirebase(n.imagem)
+    
     const desertRef = ref(storage, refImage);
     deleteObject(desertRef).then(() => {
         console.log('imagem deletada')

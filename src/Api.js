@@ -128,3 +128,16 @@ export const setLike = (id_Usuarios, id_Postagems )=>{
   .then(res=>res.json())
 } 
 
+export const setComents = (id_Usuarios, id_Postagems, body )=>{
+  return fetch(apiBase+'setComentarios',{
+    headers:{
+      "Content-Type":"application/json"
+    },
+    method:"post",
+    body:JSON.stringify({
+      id_Usuarios, id_Postagems , body
+    })
+  })
+  .then(res=>res.json())
+} 
+
