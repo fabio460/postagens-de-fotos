@@ -11,6 +11,7 @@ import {nameInitiais} from '../../Uteis'
 import Modal from './Modal';
 import BtnUpdateDelete from './btnUpdateDelete';
 import { useDispatch, useSelector } from 'react-redux';
+import ModalOpenPhoto from './ModalOpenPhoto';
 export default function Posts() {
   const [Posts, setPosts] = useState([])
   const [UserLogged, setUserLogged] = useState({})
@@ -68,19 +69,19 @@ export default function Posts() {
         loadding?
           <div>carregando ...</div>:
           <div className='PostContainer'>
-            <div className='cards PostSeguidores'>
+            <div className='cards PostSeguidores '>
               meus seguidores
             </div>
             <div>
               <h1>Atividades</h1>
+           
+              <div className='PostBody'>
               <div className='cards'>
                 <div style={{width:"100%",margin:"10px 0px 0px 0px"}}>
                   <Modal UserLogged={UserLogged} setupdatePost={setupdatePost} updatePost={updatePost}/>
                 </div>
-              </div>            
-              <div className=''>
-               
-                {Posts.map(elem=>{
+              </div>                
+                {Posts?.map(elem=>{
                   return <div className='cards'>
                     <div >
                       <div style={{display:'flex',justifyContent:"space-between"}}>
@@ -97,10 +98,13 @@ export default function Posts() {
                         </div>
                       </div>
                       <div>{elem.descricao}</div>
-                      <div><img src={elem.titulo} style={{display:elem.imagem = '' && 'none',width:"100%",maxHeight:"80%",marginTop:"30px"}}/></div>
+                      <div>
+                        <ModalOpenPhoto elem={elem}/>
+                        {/* <img src={elem.titulo} style={{display:elem.imagem = '' && 'none',width:"100%",maxHeight:"80%",marginTop:"30px"}}/> */}
+                      </div>
                       <div style={{display:'flex',justifyContent:'space-between',alignItems:"center"}}>
                         {
-                          elem.Likes.length !== 0 && 
+                          elem.Likes.length !== 0 ? 
                           <Typography style={{padding:"10px 0px",display:'flex',alignItems:"center"}}>
                             <Tooltip title={
                               elem.Likes.map(e=>{
@@ -110,8 +114,8 @@ export default function Posts() {
                                <RecommendIcon color='primary' sx={{marginRight:"3px"}}/>
                             </Tooltip>
                             {elem.Likes.length}
-                          </Typography>
-                          
+                          </Typography>:
+                          <Typography style={{padding:"20px 0px",display:'flex',alignItems:"center"}}></Typography>
                         }
                         <div>
                           {
