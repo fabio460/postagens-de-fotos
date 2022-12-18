@@ -1,4 +1,4 @@
-import { Avatar, Divider, IconButton, ListItemButton, MenuItem, Tooltip, Typography } from '@mui/material'
+import { Avatar, Divider, IconButton, ListItemButton, Tooltip, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import SendIcon from '@mui/icons-material/Send';
 import { getUser, listPostsApi, setComents, setLike } from '../../Api'
@@ -10,8 +10,9 @@ import {nameInitiais} from '../../Uteis'
 
 import Modal from './Modal';
 import BtnUpdateDelete from './btnUpdateDelete';
-import { useDispatch, useSelector } from 'react-redux';
+import {useDispatch, useSelector } from 'react-redux';
 import ModalOpenPhoto from './ModalOpenPhoto';
+import MenuComentsUpdateAndDelete from './MenuComentsUpdateAndDelete';
 export default function Posts() {
   const [Posts, setPosts] = useState([])
   const [UserLogged, setUserLogged] = useState({})
@@ -22,7 +23,6 @@ export default function Posts() {
     condition:false
   })
   const [Message, setMessage] = useState('')
-  const [Id_Post, setId_Post] = useState(-1)
   async function getListingPosts() {
     const p = await listPostsApi()
     const u = await getUser()
@@ -32,6 +32,7 @@ export default function Posts() {
 
   }
   const atualiza = useSelector(state=>state.AtualizarTela.atualiza)
+  const dispech = useDispatch()
   const like = (id)=>{
     setLike(UserLogged.id,id)
   }
@@ -54,15 +55,29 @@ export default function Posts() {
   }
   useEffect(()=>{
     getListingPosts()
-    
-  },[atualiza,like,MessageHandle])
-  
-  
 
+    // console.log(dup)
+  },[atualiza,Message,like])
+  
+  function removeDuplicataArray(arr) {
+     return [...new Set(arr)]
+  }
+
+  function ArrayNoDuplicate({arr}) {
+    let aux = arr?.map(e=>{
+      return e.Usuario.nome
+    })
+    const Arr = removeDuplicataArray(aux) 
+    return<div>
+      {Arr?.map(e=>{
+        return <div>{e}</div>
+      })}
+    </div>
+  }
   return (
     <div className='Post'>
       <div>
-        <img />
+        
       </div>
   
       {
@@ -81,7 +96,7 @@ export default function Posts() {
                   <Modal UserLogged={UserLogged} setupdatePost={setupdatePost} updatePost={updatePost}/>
                 </div>
               </div>                
-                {Posts?.map(elem=>{
+                {Posts.length ? Posts.map(elem=>{
                   return <div className='cards'>
                     <div >
                       <div style={{display:'flex',justifyContent:"space-between"}}>
@@ -100,7 +115,6 @@ export default function Posts() {
                       <div>{elem.descricao}</div>
                       <div>
                         <ModalOpenPhoto elem={elem}/>
-                        {/* <img src={elem.titulo} style={{display:elem.imagem = '' && 'none',width:"100%",maxHeight:"80%",marginTop:"30px"}}/> */}
                       </div>
                       <div style={{display:'flex',justifyContent:'space-between',alignItems:"center"}}>
                         {
@@ -111,12 +125,13 @@ export default function Posts() {
                                 return <div>{e.Usuario.nome}</div>
                               })
                             }>
-                               <RecommendIcon color='primary' sx={{marginRight:"3px"}}/>
+                              <RecommendIcon color='primary' sx={{marginRight:"3px"}}/>
                             </Tooltip>
                             {elem.Likes.length}
                           </Typography>:
                           <Typography style={{padding:"20px 0px",display:'flex',alignItems:"center"}}></Typography>
                         }
+
                         <div>
                           {
                             elem.Comentarios.length === 0 ? 
@@ -124,11 +139,27 @@ export default function Posts() {
                                <span></span>
                             </Typography>:
                             elem.Comentarios.length === 1 ?   
-                            <Typography>
-                              <span>{elem.Comentarios.length }</span> Comentario
+                            <Typography sx={{display:'flex'}}>  
+                              <span style={{marginRight:'3px'}}>{elem.Comentarios.length }</span> 
+                              <span>
+                                <Tooltip title={
+                                    elem.Comentarios.map(e=>{
+                                      return <div>{e.Usuario.nome}</div>
+                                    })
+                                  }>
+                                    <div>comentario</div>
+                                  </Tooltip>
+                              </span>
                             </Typography>:
-                            <Typography>
-                              <span>{elem.Comentarios.length }</span> Comentarios
+                            <Typography sx={{display:'flex'}}>
+                              <span style={{marginRight:'3px'}}>{elem.Comentarios.length }</span> 
+                              <span>
+                                <Tooltip title={
+                                    <ArrayNoDuplicate arr = {elem.Comentarios}/>  
+                                  }>
+                                    <div>comentarios</div>
+                                </Tooltip>
+                              </span>
                             </Typography>
                           }
                           
@@ -181,6 +212,17 @@ export default function Posts() {
                                         <div>{c.body}</div>
                                       </div>
                                     </div>
+                                    {
+                                      UserLogged.id === c.Usuario.id &&
+                                      <div>
+                                        <MenuComentsUpdateAndDelete 
+                                          id={c.id} 
+                                          id_Postagems={c.id_Postagems}
+                                          body={c.body}
+                                          id_Usuarios={c.id_Usuarios} 
+                                        />
+                                      </div>
+                                    }
                                   </div>
                                   ) 
                                 })
@@ -190,7 +232,8 @@ export default function Posts() {
                       }
                     </div>
                   </div> 
-                })}
+                }):<div style={{textAlign:'center'}}>Atualize a tela ou aguarde o banco de dados retornar</div>
+              }
               </div>
             </div>
             <div className='cards PostPerfilCompleto'>Perfil completado</div>

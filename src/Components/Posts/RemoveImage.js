@@ -3,7 +3,7 @@ import { getStorage, ref, deleteObject } from "firebase/storage";
 import { deletePost, getPotById } from "../../Api";
 import { firebaseConfig } from "../../firebaseConfig";
 import { getReferencesImageFirebase } from "../../Uteis";
-const app =  initializeApp(firebaseConfig);
+initializeApp(firebaseConfig);
 const storage = getStorage();
 export const removeImage = async(id)=>{
     const n = await getPotById(id)
@@ -11,10 +11,9 @@ export const removeImage = async(id)=>{
     
     const desertRef = ref(storage, refImage);
     deleteObject(desertRef).then(() => {
-        console.log('imagem deletada')
         deletePost(id)
       }).catch((error) => {
         deletePost(id)
-        console.log('falha ao deletar')
+        console.log(error)
       });
 }

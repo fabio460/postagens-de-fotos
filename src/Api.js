@@ -141,3 +141,34 @@ export const setComents = (id_Usuarios, id_Postagems, body )=>{
   .then(res=>res.json())
 } 
 
+export const updateComents = (id,id_Usuarios, id_Postagems, body )=>{
+  return fetch(apiBase+'updateComentarios',{
+    headers:{
+      "Content-Type":"application/json"
+    },
+    method:"put",
+    body:JSON.stringify({
+      id,
+      id_Usuarios,
+      id_Postagems,
+      body
+    })
+  })
+  .then(res=>res.json())
+} 
+
+export const deleteComents = (id_Usuarios, id_Postagems, id )=>{
+  return fetch(apiBase+'deleteComentarios',{
+    headers:{
+      "Content-Type":"application/json"
+    },
+    method:"delete",
+    body:JSON.stringify({
+      id,
+      id_Usuarios,
+      id_Postagems,
+    })
+  })
+  .then(res=>res.json())
+} 
+
