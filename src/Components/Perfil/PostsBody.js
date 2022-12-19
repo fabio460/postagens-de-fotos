@@ -5,15 +5,14 @@ import { getUser, listPostsApi, setComents, setLike } from '../../Api'
 import RecommendIcon from '@mui/icons-material/Recommend';
 import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
-import './Posts.css'
+import './Perfil.css'
 import {nameInitiais} from '../../Uteis'
-
-import Modal from './Modal';
-import BtnUpdateDelete from './btnUpdateDelete';
+import Modal from '../Posts/Modal';
+import BtnUpdateDelete from '../Posts/btnUpdateDelete';
 import { useSelector } from 'react-redux';
-import ModalOpenPhoto from './ModalOpenPhoto';
-import MenuComentsUpdateAndDelete from './MenuComentsUpdateAndDelete';
-export default function Posts() {
+import ModalOpenPhoto from '../Posts/ModalOpenPhoto';
+import MenuComentsUpdateAndDelete from '../Posts/MenuComentsUpdateAndDelete';
+export default function PostsBody() {
   const [Posts, setPosts] = useState([])
   const [UserLogged, setUserLogged] = useState({})
   const [loadding, setLoadding] = useState(true)
@@ -26,8 +25,13 @@ export default function Posts() {
   async function getListingPosts() {
     const p = await listPostsApi()
     const u = await getUser()
+    const f = p.filter(obj=>{
+        if (obj.Usuario.id === UserLogged.id) {
+            return obj
+        }
+    })
     setUserLogged(u)
-    setPosts(p)
+    setPosts(f)
     setLoadding(false)
 
   }
@@ -75,21 +79,14 @@ export default function Posts() {
   }
 
   return (
-    <div className='Post'>
-      <div>
-        
-      </div>
-  
+    <div className=''>  
       {
         loadding?
           <div>carregando ...</div>:
-          <div className='PostContainer'>
-            <div className='cards PostSeguidores '>
-              meus seguidores
-            </div>
+          <div className=''>
             <div>
-              <h1 style={{marginTop:'15px'}}>Atividades</h1>
-              <div className='PostBody'>
+              <h1 style={{marginTop:'15px'}}>Minhas postagens</h1>
+              <div className=''>
               <div className='cards'>
                 <div style={{width:"100%",margin:"10px 0px 0px 0px"}}>
                   <Modal UserLogged={UserLogged} setupdatePost={setupdatePost} updatePost={updatePost}/>
@@ -238,7 +235,6 @@ export default function Posts() {
               }
               </div>
             </div>
-            <div className='cards PostPerfilCompleto'>Perfil completado</div>
           </div>
       }
     </div>

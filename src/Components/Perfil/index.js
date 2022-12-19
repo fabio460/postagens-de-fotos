@@ -1,4 +1,4 @@
-import { Avatar, Badge, IconButton } from '@mui/material'
+import { Avatar, Badge, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
 import { getUser } from '../../Api'
 import './Perfil.css'
@@ -6,6 +6,13 @@ import { styled } from '@mui/material/styles';
 import {nameInitiais} from '../../Uteis'
 import BtnUpdatePhoto from './BtnUpdatePhoto';
 import { useSelector } from 'react-redux';
+import AvatarGroup from '@mui/material/AvatarGroup';
+import EditIcon from '@mui/icons-material/Edit';
+import WorkIcon from '@mui/icons-material/Work';
+import DonutSmallIcon from '@mui/icons-material/DonutSmall';
+import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
+import PostsBody from './PostsBody';
+
 export default function Perfil() {
 const [User, setUser] = useState({})
 const [loadding, setLoadding] = useState(true)
@@ -27,7 +34,7 @@ const SmallAvatar = styled(Avatar)(({ theme }) => ({
   border: `2px solid ${theme.palette.background.paper}`,
 }));
   return (
-    <div>
+    <div className='Perfl'>
       {
         loadding?
           <div>carregando ...</div>:
@@ -44,12 +51,58 @@ const SmallAvatar = styled(Avatar)(({ theme }) => ({
                   <Avatar sx={{height:'170px',width:'170px'}} src={User?.fotoDePerfil} alt='sem imagem'>
                    <div style={{fontSize:"45px"}}> {nameInitiais(User?.nome)}</div>
                   </Avatar>
-                
                 </Badge>
-                <div >{User.nome}</div>         
+                <div className='PerfilDadosMibile'>
+                  <div>
+                    <h1 className='PerfilDadosItems'>{User.nome}</h1>
+                    <div className='PerfilDadosItems'>seguidores</div>   
+                    <div className='PerfilDadosItems'>amigos</div> 
+                  </div>
+                </div>
+              </div>
+              <div className='PerfilDados'>
+                <div>
+                  <h1 className='PerfilDadosItems'>{User.nome}</h1>
+                  <div className='PerfilDadosItems'>
+                    <AvatarGroup max={4}   sx={{display:'flex',justifyContent:'start',
+                      '& .MuiAvatar-root': { width: 24, height: 24, fontSize: 15 },
+                    }}>
+                      <Avatar sx={{width:30,height:30}} alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                      <Avatar sx={{width:30,height:30}} alt="Travis Howard" src="/static/images/avatar/2.jpg" />
+                      <Avatar sx={{width:30,height:30}} alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
+                      <Avatar sx={{width:30,height:30}} alt="Agnes Walker" src="/static/images/avatar/4.jpg" />
+                      <Avatar sx={{width:30,height:30}} alt="Trevor Henderson" src="/static/images/avatar/5.jpg" />
+                    </AvatarGroup>  
+                  </div>   
+                  <div className='PerfilDadosItems'>amigos</div>  
+                </div>    
+                <div className='PerfilButtonsEditPerfil'>
+                  <button className='btn btn-primary p-1' style={{display:'flex',justifyContent:'center'}}>
+                    <EditIcon sx={{marginRight:'4px'}}/>
+                    <div>Editar perfil</div>
+                  </button>
+                </div>   
               </div>
             </div>
-        
+            <div className='PerfilBody'>
+              <div>
+                <div className='PerfilCards PerfilCardLft'>
+                  <Typography> 
+                    <WorkIcon/>  {User?.proficao}
+                  </Typography>
+                  <Typography>
+                    <DonutSmallIcon/> {User?.idade} anos
+                  </Typography>
+                  <Typography>
+                    <AlternateEmailIcon/> {User?.email}
+                  </Typography>
+                </div>
+                <div className='PerfilCards'>fotos</div>
+              </div>
+              <div className='PerfilCardsContent'>
+                <PostsBody/>
+              </div>
+            </div>
           </div>
       }
     </div>

@@ -1,13 +1,86 @@
+.Perfl{
+    background-color: rgb(237, 237, 237);
+    box-sizing: border-box;
+    min-height: calc(100vh - 65px);
+}
 .imageBack{
-    background-color: blue;
+    background-color: rgb(176, 176, 176);
     height: 300px;
     display: flex;
-    justify-content: center;
+    padding-left: 2%;
     align-items: flex-end;
+    width: 70%;
+    margin: auto;
+    border-radius:0px 0px 9px 9px ;
 }
 .PerfilNome{
    text-align: center;
    display: flex;
    flex-direction: column;
    margin-bottom: -50px;
+}
+.PerfilDados{
+    color: white;
+    text-shadow: 1px 1px 2px black;
+    margin-left: 20px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 20px;
+}
+.PerfilDadosMibile{
+    display: none;
+    margin-bottom: -80px;
+}
+.PerfilButtonsEditPerfil{
+    display: flex;
+    align-items: flex-end;
+}
+.PerfilBody{
+    width: 70%;
+    margin: auto;
+    margin-top: 60px;
+}
+.PerfilBody{
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 20px;
+}
+.PerfilElements{
+  background-color: white;
+}
+.PerfilCards{
+    border-radius: 10px;
+    background-color: white;
+    border: solid rgb(201, 201, 201) 1px;
+
+    padding: 10px;
+}
+.PerfilCardLft{
+    max-height: 200px;
+}
+.PerfilCardsContent{
+    max-height: 500px;
+    overflow-y: scroll;
+}
+@media (max-width:500px) {
+
+    .PerfilCardLft{
+        margin-top: 50px;
+    }
+    .PerfilBody{
+        grid-template-columns: 1fr ;
+        width: 95%;
+    }
+    .imageBack{
+        width: 100%;
+        justify-content: center;
+        margin-left: 0;
+    }
+    .PerfilDados{
+        display: none;
+    }
+    .PerfilDadosMibile{
+        display: block;
+    }
 }
