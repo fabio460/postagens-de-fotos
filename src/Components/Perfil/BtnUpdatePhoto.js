@@ -42,10 +42,7 @@ export default function BtnUpdatePhoto({User}) {
 
   const UpdatePhotoPerfil =async ()=>{
     UpdatePerfilFirebase(User?.id,Url)  
-  
-
     handleClose()
-
   }
 
   return (
