@@ -46,6 +46,23 @@ export const loginApi = (email,senha)=>{
     })
  }
 
+ export const updateUser = (id,nome,email,idade,proficao)=>{
+  return fetch(apiBase+'updateUser',{
+    headers:{
+      "Content-Type":"application/json"
+    },
+    method:"put",
+    body:JSON.stringify({
+      id,
+      nome,
+      email,
+      idade,
+      proficao
+    })
+  })
+  .then(res=>res.json())
+} 
+
  export const setPost = (imagem,titulo,descricao,id_Usuarios)=>{
   return fetch(apiBase+'createPostagem',{
     headers:{

@@ -1,6 +1,6 @@
 import { Avatar, Badge, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { getUser } from '../../Api'
+import { getUser, updateUser } from '../../Api'
 import './Perfil.css'
 import { styled } from '@mui/material/styles';
 import {nameInitiais} from '../../Uteis'
@@ -12,6 +12,7 @@ import WorkIcon from '@mui/icons-material/Work';
 import DonutSmallIcon from '@mui/icons-material/DonutSmall';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import PostsBody from './PostsBody';
+import BtnUpdateElements from './BtnUpdateElements';
 
 export default function Perfil() {
 const [User, setUser] = useState({})
@@ -24,7 +25,7 @@ async function getUserInformatios() {
 }
 useEffect(()=>{
   getUserInformatios()
-},[])
+},[atualiza])
 
 
 const SmallAvatar = styled(Avatar)(({ theme }) => ({
@@ -77,23 +78,23 @@ const SmallAvatar = styled(Avatar)(({ theme }) => ({
                   <div className='PerfilDadosItems'>amigos</div>  
                 </div>    
                 <div className='PerfilButtonsEditPerfil'>
-                  <button className='btn btn-primary p-1' style={{display:'flex',justifyContent:'center'}}>
-                    <EditIcon sx={{marginRight:'4px'}}/>
-                    <div>Editar perfil</div>
-                  </button>
+                  <BtnUpdateElements/>
                 </div>   
               </div>
             </div>
             <div className='PerfilBody'>
               <div>
                 <div className='PerfilCards PerfilCardLft'>
-                  <Typography> 
+                  <BtnUpdateElements/>
+                  {User.proficao && 
+                  <Typography sx={{mt:2}}> 
                     <WorkIcon/>  {User?.proficao}
-                  </Typography>
-                  <Typography>
+                  </Typography>}
+                  {User.idade &&
+                  <Typography sx={{margin:"10px px"}}>
                     <DonutSmallIcon/> {User?.idade} anos
-                  </Typography>
-                  <Typography>
+                  </Typography>}
+                  <Typography sx={{margin:"10px px"}}>
                     <AlternateEmailIcon/> {User?.email}
                   </Typography>
                 </div>
