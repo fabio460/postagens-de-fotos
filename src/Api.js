@@ -19,7 +19,6 @@ export const loginApi = (email,senha)=>{
     })
     .then(res=>res.json())
     .then(res=>{
-      console.log(res)
       localStorage.setItem('jwt',JSON.stringify(res))
       return res
     })
@@ -45,6 +44,26 @@ export const loginApi = (email,senha)=>{
       return res
     })
  }
+
+ export const getUserById = (Id)=>{
+  return fetch(apiBase+'getUser',{
+     method:'post',
+     headers:{
+        "Content-Type":"application/json",
+        "x-access-token":getJwt()?.JWT
+      },
+     body:JSON.stringify({
+        id:Id
+     })
+   })
+   .then(res=>res.json())
+   .then(res=>{
+     return res
+   })
+   .catch(res=>{
+     return res
+   })
+}
 
  export const updateUser = (id,nome,email,idade,proficao)=>{
   return fetch(apiBase+'updateUser',{

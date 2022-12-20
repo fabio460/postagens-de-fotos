@@ -12,23 +12,29 @@ import BtnUpdateDelete from '../Posts/btnUpdateDelete';
 import { useSelector } from 'react-redux';
 import ModalOpenPhoto from '../Posts/ModalOpenPhoto';
 import MenuComentsUpdateAndDelete from '../Posts/MenuComentsUpdateAndDelete';
-export default function PostsBody() {
+import { useNavigate } from 'react-router-dom';
+export default function PostsBody({id_User}) {
   const [Posts, setPosts] = useState([])
   const [UserLogged, setUserLogged] = useState({})
   const [loadding, setLoadding] = useState(true)
   const [updatePost, setupdatePost] = useState(false)
-  const [ComentOpen, setComentOpen] = useState({
-    id:-1,
-    condition:false
-  })
+  const [ComentOpen, setComentOpen] = useState({id:-1,condition:false})
   const [Message, setMessage] = useState('')
+  const navigate = useNavigate()
   async function getListingPosts() {
     const p = await listPostsApi()
     const u = await getUser()
     const f = p.filter(obj=>{
-        if (obj.Usuario.id === UserLogged.id) {
+        if (id_User) {
+          if (obj.Usuario.id === id_User) {
             return obj
         }
+        } else {
+          if (obj.Usuario.id === UserLogged.id) {
+            return obj
+          }         
+        }
+ 
     })
     setUserLogged(u)
     setPosts(f)
@@ -78,6 +84,10 @@ export default function PostsBody() {
     </div>
   }
 
+  const getIdUserSelected = (id_selected)=>{
+    localStorage.setItem('idUserSelected',id_selected)
+    navigate('/perfilUsers')
+  }
   return (
     <div className=''>  
       {
@@ -85,21 +95,28 @@ export default function PostsBody() {
           <div>carregando ...</div>:
           <div className=''>
             <div>
-              <h1 style={{marginTop:'15px'}}>Minhas postagens</h1>
+              <h1 style={{marginTop:'15px'}}>Postagens</h1>
               <div className=''>
-              <div className='cards'>
-                <div style={{width:"100%",margin:"10px 0px 0px 0px"}}>
-                  <Modal UserLogged={UserLogged} setupdatePost={setupdatePost} updatePost={updatePost}/>
-                </div>
-              </div>                
+              { !id_User &&
+                <div className='cards'>
+                  <div style={{width:"100%",margin:"10px 0px 0px 0px"}}>
+                    <Modal UserLogged={UserLogged} setupdatePost={setupdatePost} updatePost={updatePost}/>
+                  </div>
+                </div> 
+              }               
                 {Posts.length ? Posts.map(elem=>{
                   return <div className='cards'>
                     <div >
                       <div style={{display:'flex',justifyContent:"space-between"}}>
                         <div style={{display:'flex',alignItems:"center"}}>
-                          <Avatar src={elem.Usuario?.fotoDePerfil} sx={{marginRight:"8px"}}>{nameInitiais(elem.Usuario?.nome)}</Avatar>
+                          <Avatar 
+                            src={elem.Usuario?.fotoDePerfil}
+                            sx={{marginRight:"8px",cursor:'pointer'}}
+                            onClick={()=> getIdUserSelected(elem.Usuario.id)}
+                          >
+                            {nameInitiais(elem.Usuario?.nome)}
+                          </Avatar>                          
                           <span>{elem.Usuario?.nome}</span>
-                          
                         </div>
                         <div>
                           {
@@ -121,7 +138,7 @@ export default function PostsBody() {
                           <Typography style={{padding:"10px 0px",display:'flex',alignItems:"center"}}>
                             <Tooltip title={
                               elem.Likes.map(e=>{
-                                return <div>{e.Usuario.nome}</div>
+                                return <div style={{cursor:'pointer'}} onClick={()=> getIdUserSelected(e.Usuario.id)}>{e.Usuario.nome}</div>
                               })
                             }>
                               <RecommendIcon color='primary' sx={{marginRight:"3px"}}/>
@@ -204,8 +221,13 @@ export default function PostsBody() {
                                 elem.Comentarios.map(c=>{
                                   return (
                                     <div style={{display:'flex',alignItems:'center',margin:"16px"}}>
-                                    <Avatar src={c.Usuario.fotoDePerfil} sx={{width:'30px',height:'30px',marginRight:'10px'}}></Avatar>
-                                    <div style={{background:'rgb(250, 250, 250)',padding:"5px 12px",borderRadius:'20px',width:''}}>
+                                    <Avatar 
+                                      src={c.Usuario.fotoDePerfil} 
+                                      sx={{width:'30px',height:'30px',marginRight:'10px'}}
+                                      style={{cursor:'pointer'}} onClick={()=> getIdUserSelected(c.Usuario.id)}
+                                    >
+                                      {c.Usuario.nome}
+                                    </Avatar>                                   <div style={{background:'rgb(250, 250, 250)',padding:"5px 12px",borderRadius:'20px',width:''}}>
                                       <div style={{outline:'0',border:'none',background:'rgb(250, 250, 250)',width:''}}>
                                         <div>{c.Usuario.nome}</div>
                                         <div>{c.body}</div>
@@ -231,7 +253,7 @@ export default function PostsBody() {
                       }
                     </div>
                   </div> 
-                }):<div style={{textAlign:'center'}}>Atualize a tela ou aguarde o banco de dados retornar</div>
+                }):<div style={{textAlign:'center'}}>Não ha postagens</div>
               }
               </div>
             </div>

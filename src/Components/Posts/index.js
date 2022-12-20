@@ -7,31 +7,33 @@ import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import './Posts.css'
 import {nameInitiais} from '../../Uteis'
-
 import Modal from './Modal';
 import BtnUpdateDelete from './btnUpdateDelete';
 import { useSelector } from 'react-redux';
 import ModalOpenPhoto from './ModalOpenPhoto';
 import MenuComentsUpdateAndDelete from './MenuComentsUpdateAndDelete';
+import { useNavigate } from 'react-router-dom';
+
+
 export default function Posts() {
   const [Posts, setPosts] = useState([])
   const [UserLogged, setUserLogged] = useState({})
   const [loadding, setLoadding] = useState(true)
   const [updatePost, setupdatePost] = useState(false)
-  const [ComentOpen, setComentOpen] = useState({
-    id:-1,
-    condition:false
-  })
+  const atualiza = useSelector(state=>state.AtualizarTela.atualiza)
+  const [ComentOpen, setComentOpen] = useState({id:-1,condition:false})
   const [Message, setMessage] = useState('')
+  const navigate = useNavigate()
+
+
   async function getListingPosts() {
     const p = await listPostsApi()
     const u = await getUser()
     setUserLogged(u)
     setPosts(p)
     setLoadding(false)
-
   }
-  const atualiza = useSelector(state=>state.AtualizarTela.atualiza)
+  
   const like = (id)=>{
     setLike(UserLogged.id,id)
   }
@@ -40,7 +42,6 @@ export default function Posts() {
       id,
       condition:!ComentOpen.condition
     })
-   
   }
   
   const MessageHandle = (id)=>{
@@ -54,8 +55,6 @@ export default function Posts() {
   }
   useEffect(()=>{
     getListingPosts()
-
-    // console.log(dup)
   },[atualiza,Message,like])
   
   function removeDuplicataArray(arr) {
@@ -66,13 +65,22 @@ export default function Posts() {
     let aux = arr?.map(e=>{
       return e.Usuario.nome
     })
+    
     const Arr = removeDuplicataArray(aux) 
     return<div>
       {Arr?.map(e=>{
-        return <div>{e}</div>
+        return <div >{e}</div>
       })}
     </div>
   }
+
+
+  const getIdUserSelected = (id_selected)=>{
+    localStorage.setItem('idUserSelected',id_selected)
+    navigate('/perfilUsers')
+  }
+
+
 
   return (
     <div className='Post'>
@@ -100,9 +108,14 @@ export default function Posts() {
                     <div >
                       <div style={{display:'flex',justifyContent:"space-between"}}>
                         <div style={{display:'flex',alignItems:"center"}}>
-                          <Avatar src={elem.Usuario?.fotoDePerfil} sx={{marginRight:"8px"}}>{nameInitiais(elem.Usuario?.nome)}</Avatar>
+                          <Avatar 
+                            src={elem.Usuario?.fotoDePerfil}
+                            sx={{marginRight:"8px",cursor:'pointer'}}
+                            onClick={()=> getIdUserSelected(elem.Usuario.id)}
+                          >
+                            {nameInitiais(elem.Usuario?.nome)}
+                          </Avatar>
                           <span>{elem.Usuario?.nome}</span>
-                          
                         </div>
                         <div>
                           {
@@ -123,9 +136,9 @@ export default function Posts() {
                           elem.Likes.length !== 0 ? 
                           <Typography style={{padding:"10px 0px",display:'flex',alignItems:"center"}}>
                             <Tooltip title={
-                              elem.Likes.map(e=>{
-                                return <div>{e.Usuario.nome}</div>
-                              })
+                                elem.Likes.map(e=>{
+                                  return <div style={{cursor:'pointer'}} onClick={()=> getIdUserSelected(e.Usuario.id)}>{e.Usuario.nome}</div>
+                                })
                             }>
                               <RecommendIcon color='primary' sx={{marginRight:"3px"}}/>
                             </Tooltip>
@@ -207,7 +220,13 @@ export default function Posts() {
                                 elem.Comentarios.map(c=>{
                                   return (
                                     <div style={{display:'flex',alignItems:'center',margin:"16px"}}>
-                                    <Avatar src={c.Usuario.fotoDePerfil} sx={{width:'30px',height:'30px',marginRight:'10px'}}></Avatar>
+                                    <Avatar 
+                                      src={c.Usuario.fotoDePerfil} 
+                                      sx={{width:'30px',height:'30px',marginRight:'10px'}}
+                                      style={{cursor:'pointer'}} onClick={()=> getIdUserSelected(c.Usuario.id)}
+                                    >
+                                      {c.Usuario.nome}
+                                    </Avatar>
                                     <div style={{background:'rgb(250, 250, 250)',padding:"5px 12px",borderRadius:'20px',width:''}}>
                                       <div style={{outline:'0',border:'none',background:'rgb(250, 250, 250)',width:''}}>
                                         <div>{c.Usuario.nome}</div>

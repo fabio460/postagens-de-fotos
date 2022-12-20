@@ -1,32 +1,40 @@
 import { Avatar, Badge, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { getUser, updateUser } from '../../Api'
-import './Perfil.css'
+import { getUser, getUserById, updateUser } from '../../Api'
+
 import { styled } from '@mui/material/styles';
 import {nameInitiais} from '../../Uteis'
-import BtnUpdatePhoto from './BtnUpdatePhoto';
+import BtnUpdatePhoto from '../Perfil/BtnUpdatePhoto';
 import { useSelector } from 'react-redux';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import EditIcon from '@mui/icons-material/Edit';
 import WorkIcon from '@mui/icons-material/Work';
 import DonutSmallIcon from '@mui/icons-material/DonutSmall';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
-import PostsBody from './PostsBody';
-import BtnUpdateElements from './BtnUpdateElements';
-import PhotoList from './PhotoList';
+import PostsBody from '../Perfil/PostsBody';
+import BtnUpdateElements from '../Perfil/BtnUpdateElements';
+import PhotoList from '../Perfil/PhotoList';
+import { useNavigate } from 'react-router-dom';
 
-export default function Perfil() {
+export default function PerfilUsers() {
 const [User, setUser] = useState({})
+const [idUserLogged, setIdUserLogged] = useState()
 const [loadding, setLoadding] = useState(true)
 const atualiza = useSelector(state=>state.AtualizarTela.atualiza)
+const navigate = useNavigate()
+const idUserSelected = parseInt(localStorage.getItem('idUserSelected'))
+if (!idUserSelected || idUserSelected === idUserLogged) {
+  navigate('/perfil')
+}
 async function getUserInformatios() {
-  const u = await getUser()
+  const userLogged = await getUser()
+  setIdUserLogged(userLogged.id)
+  const u = await getUserById(parseInt(idUserSelected)) || await getUser()
   setUser(u)
   setLoadding(false)
 }
 useEffect(()=>{
   getUserInformatios()
-  //console.log(User)
 },[atualiza])
 
 
@@ -43,13 +51,12 @@ const SmallAvatar = styled(Avatar)(({ theme }) => ({
           <div>carregando ...</div>:
           <div>
             <div className='imageBack'>
+              
               <div className='PerfilNome'>
                 <Badge
                   overlap="circular"
-                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right',background:'white' }}
-                  badgeContent={
-                    <BtnUpdatePhoto User={User}/>
-                  }
+                  anchorOrigin={{ vertical: 'bottom', horizontal: 'right',background:'white' }}  
+                 
                 >
                   <Avatar sx={{height:'170px',width:'170px'}} src={User?.fotoDePerfil} alt='sem imagem'>
                    <div style={{fontSize:"45px"}}> {nameInitiais(User?.nome)}</div>
@@ -80,14 +87,14 @@ const SmallAvatar = styled(Avatar)(({ theme }) => ({
                   <div className='PerfilDadosItems'>amigos</div>  
                 </div>    
                 <div className='PerfilButtonsEditPerfil'>
-                  <BtnUpdateElements/>
+                
                 </div>   
               </div>
             </div>
             <div className='PerfilBody'>
               <div>
                 <div className='PerfilCards PerfilCardLft'>
-                  <BtnUpdateElements/>
+                 
                   {User.proficao && 
                   <Typography sx={{mt:2}}> 
                     <WorkIcon/>  {User?.proficao}
@@ -105,7 +112,7 @@ const SmallAvatar = styled(Avatar)(({ theme }) => ({
                 </div>}
               </div>
               <div className='PerfilCardsContent'>
-                <PostsBody/>
+                  <PostsBody id_User={ idUserSelected}/>   
               </div>
             </div>
           </div>

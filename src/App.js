@@ -6,6 +6,7 @@ import Home from './Components/Home';
 import Perfil from './Components/Perfil';
 import Posts from './Components/Posts';
 import Register from './Components/Register';
+import PerfilUsers from './Components/PerfilUsers';
 function App() {
   return (
     <div className="App">
@@ -22,6 +23,13 @@ function App() {
               <PrivateRoutes>
                  <Home>
                     <Perfil/>
+                 </Home>
+              </PrivateRoutes>
+            }></Route>
+            <Route path='/perfilUsers' element={
+              <PrivateRoutes>
+                 <Home>
+                    <PerfilUsers/>
                  </Home>
               </PrivateRoutes>
             }></Route>

@@ -19,7 +19,7 @@ export default function Login() {
   const logar =async ()=>{
     setLoadding(true)
     let logged = await loginApi(email,senha)
-     if (logged) {
+     if (logged !== "usuário ou senha invalidos!") {
       navigate('/')
      }else{
        setLogged(false)
