@@ -14,11 +14,13 @@ import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import PostsBody from './PostsBody';
 import BtnUpdateElements from './BtnUpdateElements';
 import PhotoList from './PhotoList';
+import { useNavigate } from 'react-router-dom';
 
 export default function Perfil() {
 const [User, setUser] = useState({})
 const [loadding, setLoadding] = useState(true)
 const atualiza = useSelector(state=>state.AtualizarTela.atualiza)
+const navigate = useNavigate()
 async function getUserInformatios() {
   const u = await getUser()
   setUser(u)
@@ -36,6 +38,11 @@ const SmallAvatar = styled(Avatar)(({ theme }) => ({
  
   border: `2px solid ${theme.palette.background.paper}`,
 }));
+
+const getIdUserSelected = (id_selected)=>{
+  localStorage.setItem('idUserSelected',id_selected)
+  navigate('/perfilUsers')
+}
   return (
     <div className='Perfl'>
       {
@@ -58,7 +65,7 @@ const SmallAvatar = styled(Avatar)(({ theme }) => ({
                 <div className='PerfilDadosMibile'>
                   <div>
                     <h1 className='PerfilDadosItems'>{User.nome}</h1>
-                    <div className='PerfilDadosItems'>seguidores</div>   
+                    <div className='PerfilDadosItems'>{User.seguidores.length} seguidor(es)</div>   
                     <div className='PerfilDadosItems'>amigos</div> 
                   </div>
                 </div>
@@ -66,18 +73,23 @@ const SmallAvatar = styled(Avatar)(({ theme }) => ({
               <div className='PerfilDados'>
                 <div>
                   <h1 className='PerfilDadosItems'>{User.nome}</h1>
+                  <div className='PerfilDadosItems'>{User.seguidores.length}  Seguidor(es)</div> 
                   <div className='PerfilDadosItems'>
                     <AvatarGroup max={4}   sx={{display:'flex',justifyContent:'start',
                       '& .MuiAvatar-root': { width: 24, height: 24, fontSize: 15 },
                     }}>
-                      <Avatar sx={{width:30,height:30}} alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                      <Avatar sx={{width:30,height:30}} alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-                      <Avatar sx={{width:30,height:30}} alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-                      <Avatar sx={{width:30,height:30}} alt="Agnes Walker" src="/static/images/avatar/4.jpg" />
-                      <Avatar sx={{width:30,height:30}} alt="Trevor Henderson" src="/static/images/avatar/5.jpg" />
+                      { 
+                         User.seguidores.map((s,key)=>{
+                          return <Avatar 
+                            sx={{width:30,height:30,cursor:'pointer'}} 
+                            alt="Remy Sharp" 
+                            src={s.Usuario.fotoDePerfil} 
+                            onClick={()=>getIdUserSelected(s.Usuario.id)}
+                            >{nameInitiais(s.Usuario.nome)}</Avatar>
+                         })
+                      }
                     </AvatarGroup>  
-                  </div>   
-                  <div className='PerfilDadosItems'>amigos</div>  
+                  </div>    
                 </div>    
                 <div className='PerfilButtonsEditPerfil'>
                   <BtnUpdateElements/>

@@ -4,7 +4,7 @@
     min-height: calc(100vh - 65px);
 }
 .imageBack{
-    background-color: rgb(176, 176, 176);
+    background-color: rgb(42, 42, 42);
     height: 300px;
     display: flex;
     padding-left: 2%;
@@ -53,7 +53,6 @@
     border-radius: 10px;
     background-color: white;
     border: solid rgb(201, 201, 201) 1px;
-
     padding: 10px;
 }
 .PerfilCardLft{

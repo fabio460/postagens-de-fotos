@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux';
 import ModalOpenPhoto from './ModalOpenPhoto';
 import MenuComentsUpdateAndDelete from './MenuComentsUpdateAndDelete';
 import { useNavigate } from 'react-router-dom';
+import { GrafPerfilCompleted } from './GrafPerfilCompleted';
 
 
 export default function Posts() {
@@ -55,6 +56,7 @@ export default function Posts() {
   }
   useEffect(()=>{
     getListingPosts()
+    //console.log(UserLogged)
   },[atualiza,Message,like])
   
   function removeDuplicataArray(arr) {
@@ -73,27 +75,29 @@ export default function Posts() {
       })}
     </div>
   }
-
-
   const getIdUserSelected = (id_selected)=>{
     localStorage.setItem('idUserSelected',id_selected)
     navigate('/perfilUsers')
   }
-
-
-
   return (
     <div className='Post'>
-      <div>
-        
-      </div>
-  
       {
         loadding?
           <div>carregando ...</div>:
           <div className='PostContainer'>
             <div className='cards PostSeguidores '>
-              meus seguidores
+            <h5 style={{marginBottom:'25px'}}>Seguidores</h5>
+              {
+                UserLogged.seguidores.map(e=>{
+                  return <div 
+                       style={{display:'flex',alignItems:'center',height:'50px',cursor:'pointer'}}
+                       onClick={()=> getIdUserSelected(e.Usuario.id)}
+                    >
+                    <Avatar src={e.Usuario.fotoDePerfil} sx={{marginRight:'5px'}}>{nameInitiais(e.Usuario.nome)}</Avatar>
+                    <h5>{e.Usuario.nome}</h5>
+                  </div>
+                })
+              }
             </div>
             <div>
               <h1 style={{marginTop:'15px'}}>Atividades</h1>
@@ -195,7 +199,9 @@ export default function Posts() {
                         (ComentOpen.id === elem.id) &&
                         <div>
                             <div style={{display:'flex',alignItems:'center',margin:"16px"}}>
-                              <Avatar src={UserLogged.fotoDePerfil} sx={{width:'30px',height:'30px',marginRight:'10px'}}></Avatar>
+                              <Avatar src={UserLogged.fotoDePerfil} sx={{width:'30px',height:'30px',marginRight:'10px'}}>
+                                {nameInitiais(UserLogged.nome)}
+                              </Avatar>
                               <div style={{
                                   background:'rgb(250, 250, 250)',
                                   padding:"5px 12px",
@@ -225,7 +231,7 @@ export default function Posts() {
                                       sx={{width:'30px',height:'30px',marginRight:'10px'}}
                                       style={{cursor:'pointer'}} onClick={()=> getIdUserSelected(c.Usuario.id)}
                                     >
-                                      {c.Usuario.nome}
+                                      {nameInitiais(c.Usuario.nome)}
                                     </Avatar>
                                     <div style={{background:'rgb(250, 250, 250)',padding:"5px 12px",borderRadius:'20px',width:''}}>
                                       <div style={{outline:'0',border:'none',background:'rgb(250, 250, 250)',width:''}}>
@@ -257,7 +263,9 @@ export default function Posts() {
               }
               </div>
             </div>
-            <div className='cards PostPerfilCompleto'>Perfil completado</div>
+            <div className='cards PostPerfilCompleto'>
+              <GrafPerfilCompleted UserLogged={UserLogged}/>
+            </div>
           </div>
       }
     </div>

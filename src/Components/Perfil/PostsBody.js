@@ -9,7 +9,7 @@ import './Perfil.css'
 import {nameInitiais} from '../../Uteis'
 import Modal from '../Posts/Modal';
 import BtnUpdateDelete from '../Posts/btnUpdateDelete';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import ModalOpenPhoto from '../Posts/ModalOpenPhoto';
 import MenuComentsUpdateAndDelete from '../Posts/MenuComentsUpdateAndDelete';
 import { useNavigate } from 'react-router-dom';
@@ -21,10 +21,12 @@ export default function PostsBody({id_User}) {
   const [ComentOpen, setComentOpen] = useState({id:-1,condition:false})
   const [Message, setMessage] = useState('')
   const navigate = useNavigate()
+  const dispeth = useDispatch()
+  const atualiza = useSelector(state=>state.AtualizarTela.atualiza)
   async function getListingPosts() {
     const p = await listPostsApi()
     const u = await getUser()
-    const f = p.filter(obj=>{
+    const f = p?.filter(obj=>{
         if (id_User) {
           if (obj.Usuario.id === id_User) {
             return obj
@@ -41,7 +43,7 @@ export default function PostsBody({id_User}) {
     setLoadding(false)
 
   }
-  const atualiza = useSelector(state=>state.AtualizarTela.atualiza)
+
   const like = (id)=>{
     setLike(UserLogged.id,id)
   }
@@ -64,8 +66,6 @@ export default function PostsBody({id_User}) {
   }
   useEffect(()=>{
     getListingPosts()
-
-    // console.log(dup)
   },[atualiza,Message,like])
   
   function removeDuplicataArray(arr) {
@@ -83,10 +83,15 @@ export default function PostsBody({id_User}) {
       })}
     </div>
   }
-
+ 
   const getIdUserSelected = (id_selected)=>{
     localStorage.setItem('idUserSelected',id_selected)
     navigate('/perfilUsers')
+    dispeth({
+      type:'atualiza',
+      payload:{atualiza:!atualiza}
+    })
+   
   }
   return (
     <div className=''>  
@@ -196,7 +201,10 @@ export default function PostsBody({id_User}) {
                         (ComentOpen.id === elem.id) &&
                         <div>
                             <div style={{display:'flex',alignItems:'center',margin:"16px"}}>
-                              <Avatar src={UserLogged.fotoDePerfil} sx={{width:'30px',height:'30px',marginRight:'10px'}}></Avatar>
+                              <Avatar src={UserLogged.fotoDePerfil} sx={{width:'30px',height:'30px',marginRight:'10px'}}>
+                                {nameInitiais(UserLogged.nome)}
+                              </Avatar>
+                              
                               <div style={{
                                   background:'rgb(250, 250, 250)',
                                   padding:"5px 12px",
@@ -226,8 +234,10 @@ export default function PostsBody({id_User}) {
                                       sx={{width:'30px',height:'30px',marginRight:'10px'}}
                                       style={{cursor:'pointer'}} onClick={()=> getIdUserSelected(c.Usuario.id)}
                                     >
-                                      {c.Usuario.nome}
-                                    </Avatar>                                   <div style={{background:'rgb(250, 250, 250)',padding:"5px 12px",borderRadius:'20px',width:''}}>
+                                      
+                                      {nameInitiais(c.Usuario.nome)}
+                                    </Avatar>                                   
+                                    <div style={{background:'rgb(250, 250, 250)',padding:"5px 12px",borderRadius:'20px',width:''}}>
                                       <div style={{outline:'0',border:'none',background:'rgb(250, 250, 250)',width:''}}>
                                         <div>{c.Usuario.nome}</div>
                                         <div>{c.body}</div>

@@ -4,6 +4,14 @@
     box-sizing: border-box;
     min-height: calc(100vh - 65px);
 }
+
+body::-webkit-scrollbar{
+    width: 10px;
+    height: 200px;
+}
+body::-webkit-scrollbar-thumb{
+    background-color: rgb(187, 187, 187);
+}
 .Post_setPost{
    display: flex;
    align-items: center;
@@ -15,6 +23,7 @@
 }
 .PostBody::-webkit-scrollbar{
     width: 10px;
+    height: 200px;
 }
 .PostBody::-webkit-scrollbar-thumb{
     background-color: rgb(187, 187, 187);
@@ -38,7 +47,7 @@
     max-height: 400px;
 }
 .PostPerfilCompleto{
-    max-height: 300px;
+    max-height: 500px;
 }
 .PostContainer{
     display: grid;
@@ -58,6 +67,10 @@
     
     max-width: 100%;
     max-height: 400px;
+}
+.Chart{
+    font-size: 30px;
+    color: blueviolet;
 }
 
 @media (max-width:500px) {

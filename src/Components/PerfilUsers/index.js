@@ -1,11 +1,11 @@
-import { Avatar, Badge, Typography } from '@mui/material'
+import { Avatar, Badge, Button, Typography } from '@mui/material'
 import React, { useEffect, useState } from 'react'
-import { getUser, getUserById, updateUser } from '../../Api'
+import { getSeguidores, getUser, getUserById, Seguir, setSeguidores, updateUser } from '../../Api'
 
 import { styled } from '@mui/material/styles';
 import {nameInitiais} from '../../Uteis'
 import BtnUpdatePhoto from '../Perfil/BtnUpdatePhoto';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import AvatarGroup from '@mui/material/AvatarGroup';
 import EditIcon from '@mui/icons-material/Edit';
 import WorkIcon from '@mui/icons-material/Work';
@@ -20,7 +20,9 @@ export default function PerfilUsers() {
 const [User, setUser] = useState({})
 const [idUserLogged, setIdUserLogged] = useState()
 const [loadding, setLoadding] = useState(true)
+const [Follow, setFollow] = useState(false)
 const atualiza = useSelector(state=>state.AtualizarTela.atualiza)
+const dispeth = useDispatch()
 const navigate = useNavigate()
 const idUserSelected = parseInt(localStorage.getItem('idUserSelected'))
 if (!idUserSelected || idUserSelected === idUserLogged) {
@@ -32,18 +34,44 @@ async function getUserInformatios() {
   const u = await getUserById(parseInt(idUserSelected)) || await getUser()
   setUser(u)
   setLoadding(false)
+} 
+
+function BtnFollow() {
+  const f = User.seguidores.filter(e=>{
+    if (e.id_Seguidor === idUserLogged && e.id_Usuarios === idUserSelected) {
+      return true
+    } else {
+      return false
+    }
+  })
+  return<div>
+    {f.length === 0 ? 
+      <Button color='primary' variant='outlined' onClick={SetSeguidores}>seguir</Button>:
+      <Button color='primary' variant='outlined' onClick={SetSeguidores}>deixar de seguir</Button>
+    }
+  </div>
 }
+
 useEffect(()=>{
   getUserInformatios()
-},[atualiza])
+  
+},[atualiza,Follow])
 
 
-const SmallAvatar = styled(Avatar)(({ theme }) => ({
-  width: 40,
-  height: 40,
- 
-  border: `2px solid ${theme.palette.background.paper}`,
-}));
+const getIdUserSelected = (id_selected)=>{
+  localStorage.setItem('idUserSelected',id_selected)
+  navigate('/perfilUsers')
+  setFollow(!Follow)
+  //window.location.reload()
+}
+
+const SetSeguidores = async()=>{
+    const s = await Seguir(idUserSelected,idUserLogged)
+    dispeth({
+      type:'atualiza',
+      payload:{atualiza:!atualiza}
+    })
+}
   return (
     <div className='Perfl'>
       {
@@ -65,8 +93,25 @@ const SmallAvatar = styled(Avatar)(({ theme }) => ({
                 <div className='PerfilDadosMibile'>
                   <div>
                     <h1 className='PerfilDadosItems'>{User.nome}</h1>
-                    <div className='PerfilDadosItems'>seguidores</div>   
-                    <div className='PerfilDadosItems'>amigos</div> 
+ 
+                    <div className='PerfilDadosItems' style={{display:'flex',flexDirection:'column',justifyContent:'space-between',margin:'40px 0px', height:70}}>
+                      <AvatarGroup max={4}   sx={{display:'flex',justifyContent:'start',
+                        '& .MuiAvatar-root': { width: 24, height: 24, fontSize: 15 },
+                      }}>
+                        { 
+                          User?.seguidores?.map((s,key)=>{
+                            return <Avatar 
+                              
+                              sx={{width:30,height:30,cursor:'pointer',bgcolor:'green'}} 
+                              alt="Remy Sharp" 
+                              src={s.Usuario.fotoDePerfil} 
+                              onClick={()=>getIdUserSelected(s.Usuario.id)}
+                              >{nameInitiais(s.Usuario.nome)}</Avatar>
+                          })
+                        }
+                      </AvatarGroup>
+                      <BtnFollow/>      
+                    </div> 
                   </div>
                 </div>
               </div>
@@ -77,17 +122,23 @@ const SmallAvatar = styled(Avatar)(({ theme }) => ({
                     <AvatarGroup max={4}   sx={{display:'flex',justifyContent:'start',
                       '& .MuiAvatar-root': { width: 24, height: 24, fontSize: 15 },
                     }}>
-                      <Avatar sx={{width:30,height:30}} alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-                      <Avatar sx={{width:30,height:30}} alt="Travis Howard" src="/static/images/avatar/2.jpg" />
-                      <Avatar sx={{width:30,height:30}} alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
-                      <Avatar sx={{width:30,height:30}} alt="Agnes Walker" src="/static/images/avatar/4.jpg" />
-                      <Avatar sx={{width:30,height:30}} alt="Trevor Henderson" src="/static/images/avatar/5.jpg" />
+                      { 
+                         User?.seguidores?.map((s,key)=>{
+                          return <Avatar 
+                            
+                            sx={{width:30,height:30,cursor:'pointer',bgcolor:'green'}} 
+                            alt="Remy Sharp" 
+                            src={s.Usuario.fotoDePerfil} 
+                            onClick={()=>getIdUserSelected(s.Usuario.id)}
+                            >{nameInitiais(s.Usuario.nome)}</Avatar>
+                         })
+                      }
                     </AvatarGroup>  
                   </div>   
-                  <div className='PerfilDadosItems'>amigos</div>  
+                  <div className='PerfilDadosItems'>{User?.seguidores.length}  Seguidor(es)</div>  
                 </div>    
                 <div className='PerfilButtonsEditPerfil'>
-                
+                  <BtnFollow/>
                 </div>   
               </div>
             </div>
@@ -107,7 +158,7 @@ const SmallAvatar = styled(Avatar)(({ theme }) => ({
                     <AlternateEmailIcon/> {User?.email}
                   </Typography>
                 </div>
-                {User.Postagems.length > 0 && <div className='PerfilCards'>
+                {User.Postagems?.length > 0 && <div className='PerfilCards'>
                   <PhotoList User={User}/>
                 </div>}
               </div>

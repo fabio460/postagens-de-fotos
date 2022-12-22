@@ -208,3 +208,28 @@ export const deleteComents = (id_Usuarios, id_Postagems, id )=>{
   .then(res=>res.json())
 } 
 
+export const getSeguidores = (id_Usuarios, id_Seguidor )=>{
+  return fetch(apiBase+'getSeguidore',{
+    headers:{
+      "Content-Type":"application/json"
+    },
+    method:"post",
+    body:JSON.stringify({
+      id_Usuarios, id_Seguidor
+    })
+  })
+  .then(res=>res.json())
+} 
+
+export const Seguir = (id_Usuarios, id_Seguidor )=>{
+  return fetch(apiBase+'seguir',{
+    headers:{
+      "Content-Type":"application/json"
+    },
+    method:"post",
+    body:JSON.stringify({
+      id_Usuarios, id_Seguidor
+    })
+  })
+  .then(res=>res.json())
+} 
