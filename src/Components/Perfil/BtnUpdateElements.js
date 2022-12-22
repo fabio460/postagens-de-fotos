@@ -50,7 +50,9 @@ const update = ()=>{
         payload:{atualiza:!atualiza}
       })
     handleClose()
-    window.location.reload()
+    setTimeout(() => {
+      window.location.reload()
+    }, 500);
 }
   return (
     <div>
