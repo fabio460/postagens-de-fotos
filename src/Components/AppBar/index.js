@@ -24,7 +24,7 @@ function ResponsiveAppBar() {
     localStorage.removeItem('jwt')
     window.location.reload()
   }
-  const pages = [<div onClick={()=>navigate('/')}>Postagens</div>, <div onClick={()=>navigate('/perfil')}>Perfil</div>, 'Blog'];
+  const pages = [<div onClick={()=>navigate('/')}>Postagens</div>, <div onClick={()=>navigate('/perfil')}>Perfil</div>];
   const settings = [<div onClick={()=>navigate('/perfil')}>Perfil</div>, <div onClick={logout}>Sair</div>];
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
