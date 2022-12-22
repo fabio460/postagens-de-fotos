@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ModalOpenPhoto from '../Posts/ModalOpenPhoto';
 import MenuComentsUpdateAndDelete from '../Posts/MenuComentsUpdateAndDelete';
 import { useNavigate } from 'react-router-dom';
+import Loadding from '../Loadding';
 export default function PostsBody({id_User}) {
   const [Posts, setPosts] = useState([])
   const [UserLogged, setUserLogged] = useState({})
@@ -97,7 +98,7 @@ export default function PostsBody({id_User}) {
     <div className=''>  
       {
         loadding?
-          <div>carregando ...</div>:
+          <Loadding/>:
           <div className=''>
             <div>
               <h1 style={{marginTop:'15px'}}>Postagens</h1>

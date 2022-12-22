@@ -15,6 +15,7 @@ import PostsBody from './PostsBody';
 import BtnUpdateElements from './BtnUpdateElements';
 import PhotoList from './PhotoList';
 import { useNavigate } from 'react-router-dom';
+import Loadding from '../Loadding';
 
 export default function Perfil() {
 const [User, setUser] = useState({})
@@ -47,7 +48,7 @@ const getIdUserSelected = (id_selected)=>{
     <div className='Perfl'>
       {
         loadding?
-          <div>carregando ...</div>:
+          <Loadding/>:
           <div>
             <div className='imageBack'>
               <div className='PerfilNome'>

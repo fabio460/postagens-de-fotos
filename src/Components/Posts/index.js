@@ -14,6 +14,7 @@ import ModalOpenPhoto from './ModalOpenPhoto';
 import MenuComentsUpdateAndDelete from './MenuComentsUpdateAndDelete';
 import { useNavigate } from 'react-router-dom';
 import { GrafPerfilCompleted } from './GrafPerfilCompleted';
+import Loadding from '../Loadding';
 
 
 export default function Posts() {
@@ -83,7 +84,7 @@ export default function Posts() {
     <div className='Post'>
       {
         loadding?
-          <div>carregando ...</div>:
+          <Loadding/>:
           <div className='PostContainer'>
             <div className='cards PostSeguidores '>
             <h5 style={{marginBottom:'25px'}}>Seguidores</h5>

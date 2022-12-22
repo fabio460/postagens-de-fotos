@@ -15,6 +15,7 @@ import PostsBody from '../Perfil/PostsBody';
 import BtnUpdateElements from '../Perfil/BtnUpdateElements';
 import PhotoList from '../Perfil/PhotoList';
 import { useNavigate } from 'react-router-dom';
+import Loadding from '../Loadding';
 
 export default function PerfilUsers() {
 const [User, setUser] = useState({})
@@ -76,7 +77,7 @@ const SetSeguidores = async()=>{
     <div className='Perfl'>
       {
         loadding?
-          <div>carregando ...</div>:
+        <Loadding/>:
           <div>
             <div className='imageBack'>
               

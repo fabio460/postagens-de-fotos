@@ -26,7 +26,7 @@ export default function PrivateRoutes({children}) {
     <div>{
         Loading 
           ?
-           <div>carregando...</div>
+           <h3 style={{ display: 'flex',justifyContent:'center',alignItems:'center',height:300 }}>carregando...</h3>
           :
           Autenticate
             ?
